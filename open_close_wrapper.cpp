@@ -64,10 +64,11 @@ extern "C" int open(const char* pathname, int flags, ...)
                 va_start(ap, flags);
                 mode_t mode = va_arg(ap, mode_t);
                 fd = ori_open(pathname, flags, mode);
+                va_end(ap);
         } else {
                 fd = ori_open(pathname, flags);
         }
-        printf("open fd: %d\n", fd);
+        //printf("open fd: %d\n", fd);
 
         save_backtrace(fd);
         return fd;
@@ -82,7 +83,7 @@ extern "C" int close(int fd)
         }
         pthread_mutex_unlock(pmutex);
 
-        printf("close fd: %d\n", fd);
+        //printf("close fd: %d\n", fd);
         close_ptr ori_close = (close_ptr)dlsym(RTLD_NEXT, "close");
         return ori_close(fd);
 }
@@ -93,7 +94,7 @@ extern "C" int socket(int domain, int type, int protocol)
         int fd = -1;
         socket_ptr ori_socket = (socket_ptr)dlsym(RTLD_NEXT, "socket");
         fd = ori_socket(domain, type, protocol);
-        printf("socket fd: %d\n", fd);
+        //printf("socket fd: %d\n", fd);
         save_backtrace(fd);
         return fd;
 }
@@ -104,7 +105,7 @@ extern "C" int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
         int fd = -1;
         accept_ptr ori_accept = (accept_ptr)dlsym(RTLD_NEXT, "accept");
         fd = ori_accept(sockfd, addr, addrlen);
-        printf("accept fd: %d\n", fd);
+        //printf("accept fd: %d\n", fd);
         save_backtrace(fd);
         return fd;
 }
