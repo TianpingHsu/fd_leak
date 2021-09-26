@@ -12,6 +12,7 @@
 #include <fcntl.h>
 #include <map>
 #include <string>
+#include <iostream>
 
 
 static std::map<int, std::string> fd_info_map;
@@ -34,11 +35,11 @@ void save_backtrace(int fd)
         std::string bt;
         for (int i = 0; i < nptrs; i++) {
                 char buf[32];
-                snprintf(buf, sizeof(buf) - 1, "%p", buf);
+                snprintf(buf, sizeof(buf) - 1, "%p", buffer[i]);
                 bt += buf;
                 bt += " ";
         }
-
+        //std::cout << "bts[" << nptrs <<"]: " << bt << std::endl;
         pthread_mutex_lock(pmutex);
         fd_info_map[fd] = bt;
         pthread_mutex_unlock(pmutex);

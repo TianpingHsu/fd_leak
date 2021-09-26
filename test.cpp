@@ -21,21 +21,25 @@ extern "C" void print_fd_info_map();
 int main ()
 {
         init_params();
+
+        // open files and print fd map info
+        printf("now we open two files:\n");
         int fd1 = open_f1();
         int fd2 = open_f2();
         if (print_fd_info_map)
                 print_fd_info_map();
-        printf("**************\n");
 
+        // close a fd and print fd map info
+        printf("\nthen we close the first file:\n");
         close(fd1);
-        printf("**************\n");
         if (print_fd_info_map)
                 print_fd_info_map();
 
+        // close a fd and print fd map info
+        printf("\nthen we close the second file:\n");
         close(fd2);
-        printf("**************\n");
         if (print_fd_info_map)
                 print_fd_info_map();
-
+        printf("\n");
         return 0;
 }
