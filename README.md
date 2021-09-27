@@ -4,9 +4,12 @@ I came across a file descriptor leakage problem, so I rewrite "open", "close", "
 When my application tries to open or close a file descriptor, I will save the calling stack and then I can print the fd usage information on a timer function.
 
 
-# How To Use
-> make
-> export LD_LIBRARY_PATH=./ ; ./test
+# Quick Test
+run the commands in your shell:
+>$make 
+>$export LD_LIBRARY_PATH=./  # set path
+>$./test
+
 here is the output:
 ```
 now we open two files:
@@ -23,4 +26,11 @@ then we close the second file:
 # How To Parse The Backtrace
 use the tool: 'addr2line'
 
+
+# Integrate Into Your Project
+1. build so: 'g++ -shared -fPIC open_close_wrapper.cpp -o libopen_close_wrapper.so -ldl'
+2. link your project with the shared library: libopen_close_wrapper.so
+3. set 'LD_LIBRARY_PATH' variable
+
 P.S. You can add more infortion to the 'map', say 'thread id', 'time' etc.
+
