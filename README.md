@@ -6,9 +6,10 @@ When my application tries to open or close a file descriptor, I will save the ca
 
 # Quick Test
 run the commands in your shell:
->$make 
->$export LD_LIBRARY_PATH=./  # set path
->$./test
+
+    $make 
+    $export LD_LIBRARY_PATH=./  # set path
+    $./test
 
 here is the output:
 ```
