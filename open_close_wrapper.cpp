@@ -26,24 +26,21 @@ extern "C" void init_params()
         pthread_mutex_init(pmutex, NULL);
 }
 
-void save_backtrace(int fd)
-{
-        int nptrs = 0;
-        void *buffer[STACK_DEPTH];
-        nptrs = backtrace(buffer, STACK_DEPTH);
-
-        std::string bt;
-        for (int i = 0; i < nptrs; i++) {
-                char buf[32];
-                snprintf(buf, sizeof(buf) - 1, "%p", buffer[i]);
-                bt += buf;
-                bt += " ";
-        }
-        //std::cout << "bts[" << nptrs <<"]: " << bt << std::endl;
-        pthread_mutex_lock(pmutex);
-        fd_info_map[fd] = bt;
-        pthread_mutex_unlock(pmutex);
-}
+#define save_backtrace(fd) do {\
+        int nptrs = 0; \
+        void *buffer[STACK_DEPTH]; \
+        nptrs = backtrace(buffer, STACK_DEPTH); \
+        std::string bt; \
+        for (int i = 0; i < nptrs; i++) { \
+                char buf[32]; \
+                snprintf(buf, sizeof(buf) - 1, "%p", buffer[i]); \
+                bt += buf; \
+                bt += " "; \
+        } \
+        pthread_mutex_lock(pmutex); \
+        fd_info_map[fd] = bt; \
+        pthread_mutex_unlock(pmutex); \
+} while(0)
 
 extern "C" void print_fd_info_map()
 {
